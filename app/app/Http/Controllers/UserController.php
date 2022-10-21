@@ -5,10 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\JsonResponse;
 
 class UserController extends Controller
 {
+    public function __construct(User $user)
+    {
+        $this->user = $user;
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -17,27 +23,34 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        $user = User::create([
+        User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => $request->password,
         ]);
 
-        return response()->json([
-            'message' => 'User created successfully!',
+        return response()->json(
+            [
+                'message' => 'User created successfully!'
+            ],
             201
-        ]);
+        );
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\User  $user
+     * @param  Integer $id
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show($id)
     {
-        //
+        $user = $this->user->find($id);
+        return response()->json(
+            [
+                'data' => $user
+            ]
+        );
     }
 
     /**
@@ -60,6 +73,12 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        $user->delete();
+
+        return response()->json(
+            [
+                'message' => 'User deleted successfully!'
+            ]
+        );
     }
 }

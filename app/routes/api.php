@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -21,7 +22,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(UserController::class)->group(function () {
     Route::post('users', 'store');
-    Route::get('users/{user}', 'show');
+    Route::get('users/{id}', 'show');
     Route::put('users/{user}', 'update');
     Route::delete('users/{user}', 'destroy');
+});
+
+Route::controller(PurchaseController::class)->group(function () {
+    Route::post('purchases', 'store');
 });
