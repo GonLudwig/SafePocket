@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,13 +21,20 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::controller(UserController::class)->group(function () {
+Route::post('register', [RegisterController::class, 'register']);
+Route::post('login', [RegisterController::class, 'login']);
+
+Route::controller(UserController::class)
+    ->middleware('auth:api')
+    ->group(function () {
     Route::post('users', 'store');
     Route::get('users/{id}', 'show');
     Route::put('users/{user}', 'update');
     Route::delete('users/{user}', 'destroy');
 });
 
-Route::controller(PurchaseController::class)->group(function () {
+Route::controller(PurchaseController::class)
+    ->middleware('auth:api')
+    ->group(function () {
     Route::post('purchases', 'store');
 });
